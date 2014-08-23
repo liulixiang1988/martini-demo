@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/go-martini/martini"
 	"log"
-	//"net/http"
+	"net/http"
 )
 
 func main() {
@@ -75,5 +75,7 @@ func main() {
 		log.Println("hello2")
 		return "Hello " + params["_1"]
 	})
-	m.Run()
+	//m.Run()
+	//修改端口
+	http.ListenAndServe(":8080", m)
 }
