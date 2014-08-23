@@ -2,7 +2,8 @@ package main
 
 import (
 	"github.com/go-martini/martini"
-	"net/http"
+	"log"
+	//"net/http"
 )
 
 func main() {
@@ -19,10 +20,20 @@ func main() {
 		以及任何其他的操作需要在http请求发生之前或者之后的:
 	*/
 	// 验证api密匙
-	m.Use(func(res http.ResponseWriter, req *http.Request) {
-		if req.Header.Get("X-API-KEY") != "secret123" {
-			res.WriteHeader(http.StatusUnauthorized)
-		}
+	// m.Use(func(res http.ResponseWriter, req *http.Request) {
+	// 	if req.Header.Get("X-API-KEY") != "secret123" {
+	// 		res.WriteHeader(http.StatusUnauthorized)
+	// 	}
+	// })
+
+	//Context.Next()是一个可选的函数用于中间件处理器暂时放弃执行直到其他的处理器都执行完毕. 这样就可以很好的处理在http请求完成后需要做的操作.
+	// log 记录请求完成前后  (*译者注: 很巧妙，掌声鼓励.)
+	m.Use(func(c martini.Context, log *log.Logger) {
+		log.Println("before a request")
+
+		c.Next()
+
+		log.Println("after a request")
 	})
 
 	//路由匹配的顺序是按照他们被定义的顺序执行的. 最先被定义的路由将会首先被用户请求匹配并调用
@@ -61,6 +72,7 @@ func main() {
 
 	//路由匹配可以通过正则表达式或者glob的形式
 	m.Get("/hello2/**", func(params martini.Params) string {
+		log.Println("hello2")
 		return "Hello " + params["_1"]
 	})
 	m.Run()
