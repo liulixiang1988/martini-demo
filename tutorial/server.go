@@ -75,6 +75,9 @@ func main() {
 		log.Println("hello2")
 		return "Hello " + params["_1"]
 	})
+
+	//martini整合到现有服务当中
+	http.Handle("/", m)
 	//m.Run()
 	//修改端口
 	http.ListenAndServe(":8080", m)
