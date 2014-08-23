@@ -6,8 +6,8 @@ import (
 
 func main() {
 	m := martini.Classic()
-	m.Get("/", func() string {
-		return "Hello world!"
+	m.Get("/", func() (int, string) {
+		return 418, "I'm a teaport" //状态码418
 	})
 	m.Run()
 }
