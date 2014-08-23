@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/auth"
 	"log"
 	"net/http"
 )
@@ -35,6 +36,8 @@ func main() {
 
 		log.Println("after a request")
 	})
+
+	m.Use(auth.Basic("test", "123"))
 
 	//路由匹配的顺序是按照他们被定义的顺序执行的. 最先被定义的路由将会首先被用户请求匹配并调用
 	m.Get("/", func() (int, string) {
