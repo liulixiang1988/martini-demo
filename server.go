@@ -36,5 +36,14 @@ func main() {
 		// 处理 404
 	})
 
+	//路由模型可能包含参数列表, 可以通过martini.Params服务来获取
+	m.Get("/hello/:name", func(params martini.Params) string {
+		return "Hello " + params["name"]
+	})
+
+	//路由匹配可以通过正则表达式或者glob的形式
+	m.Get("/hello2/**", func(params martini.Params) string {
+		return "Hello " + params["_1"]
+	})
 	m.Run()
 }
