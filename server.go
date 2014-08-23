@@ -2,10 +2,28 @@ package main
 
 import (
 	"github.com/go-martini/martini"
+	"net/http"
 )
 
 func main() {
 	m := martini.Classic()
+	//中间件处理器是工作于请求和路由之间的. 本质上来说和Martini其他的处理器没有分别.
+	/*
+		你可以通过Handlers函数对中间件堆有完全的控制. 它将会替换掉之前的任何设置过的处理器
+		m.Handlers(
+		  Middleware1,
+		  Middleware2,
+		  Middleware3,
+		)
+		中间件处理器可以非常好处理一些功能，像logging(日志), authorization(授权), authentication(认证), sessions(会话), error pages(错误页面),
+		以及任何其他的操作需要在http请求发生之前或者之后的:
+	*/
+	// 验证api密匙
+	m.Use(func(res http.ResponseWriter, req *http.Request) {
+		if req.Header.Get("X-API-KEY") != "secret123" {
+			res.WriteHeader(http.StatusUnauthorized)
+		}
+	})
 
 	//路由匹配的顺序是按照他们被定义的顺序执行的. 最先被定义的路由将会首先被用户请求匹配并调用
 	m.Get("/", func() (int, string) {
